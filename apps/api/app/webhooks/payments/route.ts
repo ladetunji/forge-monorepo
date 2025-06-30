@@ -1,20 +1,22 @@
 import { env } from '@/env';
 import { analytics } from '@repo/analytics/posthog/server';
-import { clerkClient } from '@repo/auth/server';
 import { parseError } from '@repo/observability/error';
 import { log } from '@repo/observability/log';
 import { stripe } from '@repo/payments';
 import type { Stripe } from '@repo/payments';
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { database } from '@repo/database';
 
 const getUserFromCustomerId = async (customerId: string) => {
-  const clerk = await clerkClient();
-  const users = await clerk.users.getUserList();
-
-  const user = users.data.find(
-    (user) => user.privateMetadata.stripeCustomerId === customerId
-  );
+  const user = await database.user.findFirst({
+    where: {
+      privateMetadata: {
+        path: ['stripeCustomerId'],
+        equals: customerId,
+      },
+    },
+  });
 
   return user;
 };
@@ -28,15 +30,10 @@ const handleCheckoutSessionCompleted = async (
 
   const customerId =
     typeof data.customer === 'string' ? data.customer : data.customer.id;
-  const user = await getUserFromCustomerId(customerId);
-
-  if (!user) {
-    return;
-  }
 
   analytics.capture({
     event: 'User Subscribed',
-    distinctId: user.id,
+    distinctId: customerId,
   });
 };
 
@@ -49,15 +46,10 @@ const handleSubscriptionScheduleCanceled = async (
 
   const customerId =
     typeof data.customer === 'string' ? data.customer : data.customer.id;
-  const user = await getUserFromCustomerId(customerId);
-
-  if (!user) {
-    return;
-  }
 
   analytics.capture({
     event: 'User Unsubscribed',
-    distinctId: user.id,
+    distinctId: customerId,
   });
 };
 
