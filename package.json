@@ -18,7 +18,9 @@
     "boundaries": "turbo boundaries",
     "bump-deps": "npx npm-check-updates --deep -u -x react-day-picker",
     "bump-ui": "npx shadcn@latest add --all --overwrite -c packages/design-system",
-    "migrate": "cd packages/database && npx prisma format && npx prisma generate && npx prisma db push",
+    "db:migrate": "cd packages/database && npx drizzle-kit migrate",
+    "db:generate": "cd packages/database && npx drizzle-kit generate",
+    "db:pull": "cd packages/database && npx drizzle-kit pull",
     "clean": "git clean -xdf node_modules"
   },
   "devDependencies": {
@@ -39,7 +41,9 @@
   "packageManager": "pnpm@10.11.0",
   "dependencies": {
     "@clack/prompts": "^0.11.0",
-    "commander": "^14.0.0"
+    "@t3-oss/env-nextjs": "^0.13.4",
+    "commander": "^14.0.0",
+    "zod": "^3.25.28"
   },
   "type": "module"
 }

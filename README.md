@@ -1,4 +1,4 @@
-# ▲ / next-forge
+# ▲ / forge-monorepo
 
 **Production-grade Turborepo template for Next.js apps.**
 
@@ -24,8 +24,8 @@ Then read the [docs](https://www.next-forge.com/docs) for more information.
 
 ## Contributors
 
-<a href="https://github.com/vercel/next-forge/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=vercel/next-forge" />
+<a href="https://github.com/ladetunji/forge-monorepo/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=ladetunji/forge-monorepo" />
 </a>
 
 Made with [contrib.rocks](https://contrib.rocks).

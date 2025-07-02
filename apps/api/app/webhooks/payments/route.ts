@@ -1,19 +1,18 @@
 import { env } from '@/env';
 import { analytics } from '@repo/analytics/posthog/server';
+import { database } from '@repo/database';
 import { parseError } from '@repo/observability/error';
 import { log } from '@repo/observability/log';
 import { stripe } from '@repo/payments';
 import type { Stripe } from '@repo/payments';
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { database } from '@repo/database';
 
 const getUserFromCustomerId = async (customerId: string) => {
   const user = await database.user.findFirst({
     where: {
       privateMetadata: {
-        path: ['stripeCustomerId'],
-        equals: customerId,
+        contains: { stripeCustomerId: customerId },
       },
     },
   });

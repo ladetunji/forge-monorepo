@@ -1,13 +1,14 @@
 "use client";
 
-import { signIn } from '../client';
 import { useState } from 'react';
+import type * as React from 'react';
+import { signIn } from '../client';
 
 export const SignIn = () => {
   const [method, setMethod] = useState<'email' | 'phone'>('email');
   const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -28,8 +29,12 @@ export const SignIn = () => {
         });
       }
       // Optionally, redirect or show success
-    } catch (err: any) {
-      setError(err?.message || "Sign in failed. Please try again.");
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Sign in failed. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -37,7 +42,7 @@ export const SignIn = () => {
 
   return (
     <>
-      <div className="flex justify-center gap-2 mb-4">
+      <div className='mb-4 flex justify-center gap-2'>
         <button
           type="button"
           className={method === 'email' ? 'font-bold underline' : ''}
@@ -94,13 +99,13 @@ export const SignIn = () => {
       </form>
       <div className="relative my-4">
         <div className="absolute inset-0 flex items-center" aria-hidden="true">
-          <div className="w-full border-t border-gray-200" />
+          <div className='w-full border-gray-200 border-t' />
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-white text-gray-400">or continue with</span>
+          <span className='bg-white px-2 text-gray-400'>or continue with</span>
         </div>
       </div>
-      <div className="flex gap-2 justify-center">
+      <div className='flex justify-center gap-2'>
         <button type="button" onClick={() => signIn.social({ provider: "github" })}>Github</button>
         <button type="button" onClick={() => signIn.social({ provider: "google" })}>Google</button>
       </div>

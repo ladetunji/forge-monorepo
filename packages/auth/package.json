@@ -7,8 +7,10 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
+    "@dub/better-auth": "^0.0.3",
     "@t3-oss/env-nextjs": "^0.13.4",
     "better-auth": "^1.2.12",
+    "dub": "^0.63.6",
     "next": "15.3.2",
     "next-themes": "^0.4.6",
     "nodemailer": "^7.0.4",

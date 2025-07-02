@@ -21,8 +21,12 @@ export const SignUp = () => {
           try {
             await signUp.email({ email, password, name });
             // Optionally redirect or show success
-          } catch (err: any) {
-            setError(err?.message || "Sign up failed. Please try again.");
+          } catch (err) {
+            if (err instanceof Error) {
+              setError(err.message);
+            } else {
+              setError("Sign up failed. Please try again.");
+            }
           } finally {
             setLoading(false);
           }
@@ -62,13 +66,13 @@ export const SignUp = () => {
       </form>
       <div className="relative my-4">
         <div className="absolute inset-0 flex items-center" aria-hidden="true">
-          <div className="w-full border-t border-gray-200" />
+          <div className='w-full border-gray-200 border-t' />
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-white text-gray-400">or continue with</span>
+          <span className='bg-white px-2 text-gray-400'>or continue with</span>
         </div>
       </div>
-      <div className="flex gap-2 justify-center">
+      <div className="flex justify-center gap-2">
         <button type="button" onClick={() => signIn.social({ provider: "github" })}>Github</button>
         <button type="button" onClick={() => signIn.social({ provider: "google" })}>Google</button>
       </div>

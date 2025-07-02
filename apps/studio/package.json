@@ -2,11 +2,14 @@
   "name": "studio",
   "version": "0.0.0",
   "scripts": {
-    "dev": "prisma studio --schema ../../packages/database/prisma/schema.prisma --port 3005",
+    "dev": "drizzle-kit studio --config ../../packages/database/studio.config.ts --port 3005",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
+  "dependencies": {
+    "drizzle-orm": "^0.44.2"
+  },
   "devDependencies": {
-    "prisma": "6.8.2"
+    "drizzle-kit": "^0.31.4"
   }
 }

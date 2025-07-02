@@ -1,44 +1,51 @@
+import { dubAnalytics } from "@dub/better-auth";
 import { betterAuth } from 'better-auth';
-import { emailOTP, phoneNumber, admin } from "better-auth/plugins";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
-import { prismaAdapter } from "better-auth/adapters/prisma";
-import { database } from "../database"
+import { admin, emailOTP, phoneNumber } from "better-auth/plugins";
+import { Dub } from "dub";
+import { database } from "@repo/database";
 
 export const auth = betterAuth({
-  database: prismaAdapter(database, {
-    provider: 'postgresql',
+  database: drizzleAdapter(database, {
+    provider: 'pg',
   }),
   emailAndPassword: {
     enabled: true
   },
   socialProviders: {
     github: {
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
     },
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
     apple: {
-      clientId: process.env.APPLE_CLIENT_ID!,
-      clientSecret: process.env.APPLE_CLIENT_SECRET!,
+      clientId: process.env.APPLE_CLIENT_ID as string,
+      clientSecret: process.env.APPLE_CLIENT_SECRET as string,
     },
     facebook: {
-      clientId: process.env.FACEBOOK_CLIENT_ID!,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
+      clientId: process.env.FACEBOOK_CLIENT_ID as string,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
     }
   },
   plugins: [
     emailOTP({
-      async sendVerificationOTP({ email, otp, type }) {
+      async sendVerificationOTP({ email: _email, otp: _otp, type: _type }) {
         // Implement the sendVerificationOTP method to send the OTP to the user's email address
+        // remove the object labels and underscores before use
       },
     }),
     phoneNumber({
-      sendOTP: ({ phoneNumber, code }, request) => {
+      sendOTP: ({ phoneNumber: _phoneNumber, code: _code }, _request) => {
         // Implement sending OTP code via SMS
+        // remove the object labels and underscores before use
       },
+    }),
+    dubAnalytics({
+      dubClient: new Dub()
     }),
     admin(),
     nextCookies()
